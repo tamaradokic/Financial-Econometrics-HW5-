@@ -1,0 +1,225 @@
+{
+  "n_obs": 2513,
+  "start": "2016-06-14",
+  "end": "2026-06-11",
+  "tickers": [
+    "NVDA",
+    "TSLA",
+    "LLY",
+    "JPM",
+    "XOM"
+  ],
+  "ticker_names": {
+    "NVDA": "NVIDIA (semiconductors / AI)",
+    "TSLA": "Tesla (auto / EV)",
+    "LLY": "Eli Lilly (pharma)",
+    "JPM": "JPMorgan Chase (financials)",
+    "XOM": "ExxonMobil (energy)"
+  },
+  "rf_eff": 2.4009967974379505,
+  "dcc_a": 0.021571226437164796,
+  "dcc_b": 0.9583023713398331,
+  "dcc_persistence": 0.9798735977769979,
+  "dcc_loglik": 743.7807625086776,
+  "garch_params": {
+    "NVDA": {
+      "mu": 0.3062,
+      "omega": 0.8053,
+      "alpha": 0.1337,
+      "beta": 0.7925,
+      "alpha+beta": 0.9263,
+      "Log-lik": -6290.079,
+      "AIC": 12588.1581,
+      "BIC": 12611.475
+    },
+    "TSLA": {
+      "mu": 0.1009,
+      "omega": 0.1158,
+      "alpha": 0.035,
+      "beta": 0.9569,
+      "alpha+beta": 0.992,
+      "Log-lik": -6703.4539,
+      "AIC": 13414.9077,
+      "BIC": 13438.2246
+    },
+    "LLY": {
+      "mu": 0.1477,
+      "omega": 0.2226,
+      "alpha": 0.0893,
+      "beta": 0.854,
+      "alpha+beta": 0.9433,
+      "Log-lik": -5022.5884,
+      "AIC": 10053.1768,
+      "BIC": 10076.4937
+    },
+    "JPM": {
+      "mu": 0.1102,
+      "omega": 0.1437,
+      "alpha": 0.1009,
+      "beta": 0.8409,
+      "alpha+beta": 0.9418,
+      "Log-lik": -4536.2435,
+      "AIC": 9080.4869,
+      "BIC": 9103.8039
+    },
+    "XOM": {
+      "mu": 0.0256,
+      "omega": 0.0134,
+      "alpha": 0.0698,
+      "beta": 0.9289,
+      "alpha+beta": 0.9986,
+      "Log-lik": -4591.5915,
+      "AIC": 9191.183,
+      "BIC": 9214.4999
+    }
+  },
+  "uncond_corr": {
+    "NVDA": {
+      "NVDA": 1.0,
+      "TSLA": 0.432,
+      "LLY": 0.196,
+      "JPM": 0.335,
+      "XOM": 0.182
+    },
+    "TSLA": {
+      "NVDA": 0.432,
+      "TSLA": 1.0,
+      "LLY": 0.103,
+      "JPM": 0.279,
+      "XOM": 0.152
+    },
+    "LLY": {
+      "NVDA": 0.196,
+      "TSLA": 0.103,
+      "LLY": 1.0,
+      "JPM": 0.23,
+      "XOM": 0.179
+    },
+    "JPM": {
+      "NVDA": 0.335,
+      "TSLA": 0.279,
+      "LLY": 0.23,
+      "JPM": 1.0,
+      "XOM": 0.51
+    },
+    "XOM": {
+      "NVDA": 0.182,
+      "TSLA": 0.152,
+      "LLY": 0.179,
+      "JPM": 0.51,
+      "XOM": 1.0
+    }
+  },
+  "rho_widest_pair": "JPM-XOM",
+  "rho_widest_min": -0.06547312878678076,
+  "rho_widest_max": 0.7019954315535497,
+  "n_flip_pairs": 9,
+  "mvp_dcc_mean_weights": {
+    "NVDA": 0.035,
+    "TSLA": 0.034,
+    "LLY": 0.278,
+    "JPM": 0.315,
+    "XOM": 0.337
+  },
+  "mvp_static_weights": {
+    "NVDA": 0.031,
+    "TSLA": 0.034,
+    "LLY": 0.346,
+    "JPM": 0.279,
+    "XOM": 0.31
+  },
+  "strategies": [
+    {
+      "name": "MVP (DCC)",
+      "mean_daily": 0.07851875283060568,
+      "var_daily": 1.6016183464005693,
+      "std_daily": 1.2655506099720268,
+      "ann_return": 19.78672571331263,
+      "ann_vol": 20.089993113312495,
+      "sharpe": 0.8653924776287826,
+      "max_dd": -38.764327004149756
+    },
+    {
+      "name": "MVP (static)",
+      "mean_daily": 0.08317519698664379,
+      "var_daily": 1.6898931541866773,
+      "std_daily": 1.29995890480687,
+      "ann_return": 20.960149640634235,
+      "ann_vol": 20.636207860337194,
+      "sharpe": 0.8993489971026599,
+      "max_dd": -39.619681834428555
+    },
+    {
+      "name": "Equal-weight",
+      "mean_daily": 0.11319354170732993,
+      "var_daily": 2.56302230055211,
+      "std_daily": 1.6009441903302282,
+      "ann_return": 28.524772510247143,
+      "ann_vol": 25.414201143044647,
+      "sharpe": 1.027920396386677,
+      "max_dd": -42.23863274319753
+    }
+  ],
+  "stats": {
+    "NVDA": {
+      "Mean": 0.206,
+      "Std. Dev.": 3.123,
+      "Min": -20.771,
+      "Max": 26.088,
+      "Skewness": 0.069,
+      "Excess Kurtosis": 6.513,
+      "JB p-value": 0.0,
+      "ARCH-LM(10) p-value": 0.0,
+      "Ljung-Box(r^2, 10) p-value": 0.0,
+      "N obs": 2513
+    },
+    "TSLA": {
+      "Mean": 0.132,
+      "Std. Dev.": 3.715,
+      "Min": -23.652,
+      "Max": 20.449,
+      "Skewness": -0.051,
+      "Excess Kurtosis": 4.237,
+      "JB p-value": 0.0,
+      "ARCH-LM(10) p-value": 0.0,
+      "Ljung-Box(r^2, 10) p-value": 0.0,
+      "N obs": 2513
+    },
+    "LLY": {
+      "Mean": 0.116,
+      "Std. Dev.": 1.89,
+      "Min": -15.241,
+      "Max": 14.566,
+      "Skewness": 0.387,
+      "Excess Kurtosis": 10.653,
+      "JB p-value": 0.0,
+      "ARCH-LM(10) p-value": 0.0,
+      "Ljung-Box(r^2, 10) p-value": 0.0,
+      "N obs": 2513
+    },
+    "JPM": {
+      "Mean": 0.074,
+      "Std. Dev.": 1.723,
+      "Min": -16.211,
+      "Max": 16.562,
+      "Skewness": -0.115,
+      "Excess Kurtosis": 13.632,
+      "JB p-value": 0.0,
+      "ARCH-LM(10) p-value": 0.0,
+      "Ljung-Box(r^2, 10) p-value": 0.0,
+      "N obs": 2513
+    },
+    "XOM": {
+      "Mean": 0.036,
+      "Std. Dev.": 1.778,
+      "Min": -13.039,
+      "Max": 11.944,
+      "Skewness": -0.229,
+      "Excess Kurtosis": 6.191,
+      "JB p-value": 0.0,
+      "ARCH-LM(10) p-value": 0.0,
+      "Ljung-Box(r^2, 10) p-value": 0.0,
+      "N obs": 2513
+    }
+  }
+}

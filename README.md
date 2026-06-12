@@ -7,6 +7,10 @@ Prof. Jeroen V.K. Rombouts
 A multivariate **DCC-GARCH** analysis of five sector-diverse US stocks, with
 an interactive Streamlit dashboard for exploration.
 
+> **📄 Two-page write-up:** [`report/report.pdf`](report/report.pdf) — the
+> compiled report with all key findings, methodology, figures, and the strategy verdict.
+> LaTeX source: [`report/report.tex`](report/report.tex).
+
 ## What the project does
 
 We estimate a Dynamic Conditional Correlation (DCC) GARCH model on five
@@ -89,8 +93,14 @@ HW5/
 ├── requirements.txt           Pinned Python dependencies
 ├── .gitignore
 ├── data/                      Cached parquet (gitignored)
+├── report/
+│   ├── report.tex             LaTeX source (2-page, two-column)
+│   ├── report.pdf             Compiled PDF deliverable
+│   ├── make_figures.py        Generates print-quality PDF figures
+│   ├── figures/               Generated figures (PDF)
+│   └── numbers.json           Sample stats consumed by the report
 └── src/
-    ├── data.py                Yahoo download + log-returns
+    ├── data.py                Yahoo download + FRED T-bill + log-returns
     ├── descriptive.py         Q1 stats, unconditional ρ, Q2 pair data
     ├── garch.py               Univariate GARCH(1,1) step (uses `arch`)
     ├── dcc.py                 DCC step 2 (hand-rolled MLE + recursion)
