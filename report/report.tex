@@ -30,7 +30,7 @@
 \setlength{\belowdisplayshortskip}{2pt}
 
 \title{\vspace{-1.4cm}\textbf{Dynamic Conditional Correlations during financial turmoil}\\[2pt]
-  \normalsize Financial Econometrics --- Homework 5 \\
+  \normalsize Financial Econometrics, Homework 5 \\
   \small ESSEC Master in Data Science \& Business Analytics, term T3 2025--26}
 \author{\small Tamara Dokic \,\textbar\, Valentin Levy \,\textbar\, Baptiste Noel \,\textbar\, Sagar Vishishta}
 \date{\vspace{-6pt}\small \today}
@@ -43,16 +43,16 @@
     \maketitle
     \vspace{-1.2em}
     \begin{abstract}\noindent\small
-      We estimate a multivariate DCC--GARCH(1,1) model on five sector-diverse US equities (NVIDIA, Tesla, Eli~Lilly, JPMorgan Chase, ExxonMobil) over 2016--2026 and apply the model's time-varying covariance matrix to construct a minimum-variance portfolio (MVP). The DCC dynamics uncover substantial intertemporal variation in pairwise correlations --- \textbf{9 of 10 pairs exhibit sign reversals} --- that the unconditional correlation matrix entirely conceals. The DCC-based MVP delivers a strictly lower realized variance than the static-covariance MVP, providing direct empirical support for modelling time-variation in the second moments. The naive equal-weighted (1/$N$) portfolio nonetheless attains the highest realized Sharpe ratio, reproducing the well-known result of DeMiguel, Garlappi, and Uppal (2009) on the difficulty of beating naive diversification.
+      We estimate a multivariate DCC--GARCH(1,1) model on five sector-diverse US equities (NVIDIA, Tesla, Eli~Lilly, JPMorgan Chase, ExxonMobil) over 2016--2026 and apply the model's time-varying covariance matrix to construct a minimum-variance portfolio (MVP). The DCC dynamics uncover substantial intertemporal variation in pairwise correlations; \textbf{9 of 10 pairs exhibit sign reversals}, a pattern that the unconditional correlation matrix entirely conceals. The DCC-based MVP delivers a strictly lower realized variance than the static-covariance MVP, providing direct empirical support for modelling time-variation in the second moments. The naive equal-weighted (1/$N$) portfolio nonetheless attains the highest realized Sharpe ratio, reproducing the well-known result of DeMiguel, Garlappi, and Uppal (2009) on the difficulty of beating naive diversification.
     \end{abstract}
     \vspace{0.6em}
   \end{@twocolumnfalse}
 ]
 
 \section{Data}
-Daily adjusted closing prices for NVDA, TSLA, LLY, JPM, XOM were retrieved from Yahoo Finance for the period 2016-06-14 to 2026-06-11 ($T = 2{,}513$ trading days). Returns are continuously compounded percentage log differences, $r_{i,t} = 100\log(P_{i,t}/P_{i,t-1})$. The universe spans semiconductors/AI, automotive/EV, pharmaceuticals, banking and energy --- sectors with distinct macroeconomic drivers and therefore plausibly time-varying co-movement.
+Daily adjusted closing prices for NVDA, TSLA, LLY, JPM, XOM were retrieved from Yahoo Finance for the period 2016-06-14 to 2026-06-11 ($T = 2{,}513$ trading days). Returns are continuously compounded percentage log differences, $r_{i,t} = 100\log(P_{i,t}/P_{i,t-1})$. The universe spans semiconductors/AI, automotive/EV, pharmaceuticals, banking and energy, sectors with distinct macroeconomic drivers and therefore plausibly time-varying co-movement.
 
-\textbf{Stylized facts.} All five series display pronounced leptokurtosis (sample excess kurtosis up to $13.6$ for JPM), strong rejection of normality by the Jarque--Bera test, and highly significant ARCH effects (Engle's ARCH--LM$(10)$ $p$-value $<10^{-3}$ in every case). These two stylized facts --- fat tails and conditional heteroskedasticity --- motivate the GARCH framework used throughout.
+\textbf{Stylized facts.} All five series display pronounced leptokurtosis (sample excess kurtosis up to $13.6$ for JPM), strong rejection of normality by the Jarque--Bera test, and highly significant ARCH effects (Engle's ARCH--LM$(10)$ $p$-value $<10^{-3}$ in every case). These two stylized facts, fat tails and conditional heteroskedasticity, motivate the GARCH framework used throughout.
 
 \section{Methodology}
 We follow Engle's (2002) two-step DCC procedure.
@@ -82,7 +82,7 @@ The DCC parameter estimates are
 \]
 with composite log-likelihood $743.78$. The persistence is high but strictly less than one, satisfying covariance stationarity: correlation shocks dissipate gradually, producing regimes that persist for many months.
 
-\textbf{Dynamic correlations (Figure~\ref{fig:rho}).} The DCC uncovers dependence structures that the unconditional matrix entirely obscures. \textbf{Nine of the ten unique pairs flip sign} at some point in the sample, transitioning between regimes of positive and negative co-movement. The widest range is the JPM--XOM pair, whose conditional correlation varies from $-0.07$ to $+0.70$. All pairs exhibit sharp upward movements during the COVID-19 shock of March~2020 and during the 2022 monetary tightening cycle --- the empirical signature of \textit{financial contagion}. The practical implication is that the diversification benefit available from any given asset pair is itself state-dependent and tends to deteriorate precisely when it would be most valuable.
+\textbf{Dynamic correlations (Figure~\ref{fig:rho}).} The DCC uncovers dependence structures that the unconditional matrix entirely obscures. \textbf{Nine of the ten unique pairs flip sign} at some point in the sample, transitioning between regimes of positive and negative co-movement. The widest range is the JPM--XOM pair, whose conditional correlation varies from $-0.07$ to $+0.70$. All pairs exhibit sharp upward movements during the COVID-19 shock of March~2020 and during the 2022 monetary tightening cycle, the empirical signature of \textit{financial contagion}. The practical implication is that the diversification benefit available from any given asset pair is itself state-dependent and tends to deteriorate precisely when it would be most valuable.
 
 \begin{figure*}[t]
 \centering
