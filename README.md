@@ -2,7 +2,6 @@
 
 **Financial Econometrics — Homework 5**
 ESSEC Master in Data Science & Business Analytics, term T3 2025-26
-Prof. Jeroen V.K. Rombouts
 
 A multivariate **DCC-GARCH** analysis of five sector-diverse US stocks, with
 an interactive Streamlit dashboard for exploration.
@@ -87,7 +86,6 @@ covariance; the equal-weight benchmark is just 1/N at every date.
 
 ```
 HW5/
-├── Homework5_2026T3.pdf       Original assignment brief
 ├── app.py                     Streamlit dashboard (one-page scroll)
 ├── README.md                  This file
 ├── requirements.txt           Pinned Python dependencies

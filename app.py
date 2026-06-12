@@ -488,13 +488,6 @@ else:
         use_container_width=True,
     )
 
-    st.subheader("Peak-to-trough drawdown")
-    st.plotly_chart(
-        plots.drawdown_lines(returns_by_strategy, show_crises=show_crises),
-        use_container_width=True,
-    )
-    _interp(*interp.drawdown_block({name: plots.drawdown_series(r) for name, r in returns_by_strategy.items()}))
-
     # Summary table — recomputed on the sliced returns so the user's date range matters.
     sharpe_col = f"Sharpe ({rf_label})"
     rows = []
@@ -552,5 +545,5 @@ st.caption(
     "Two-step DCC-GARCH(1,1), Gaussian innovations, normal-distribution log-likelihood. "
     "Univariate step fit with `arch`; DCC step hand-rolled with NumPy/SciPy. "
     "Portfolio returns use lagged weights (no look-ahead). "
-    "Made for ESSEC Financial Econometrics, Prof. J. Rombouts."
+    "Financial Econometrics — Homework 5."
 )
