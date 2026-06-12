@@ -6,6 +6,8 @@ ESSEC Master in Data Science & Business Analytics, term T3 2025-26
 A multivariate **DCC-GARCH** analysis of five sector-diverse US stocks, with
 an interactive Streamlit dashboard for exploration.
 
+> **Live dashboard:** [dhszn3xylppgkzdft8b3qy.streamlit.app](https://dhszn3xylppgkzdft8b3qy.streamlit.app/)
+
 > **📄 Two-page write-up:** [`report/report.pdf`](report/report.pdf) — the
 > compiled report with all key findings, methodology, figures, and the strategy verdict.
 > LaTeX source: [`report/report.tex`](report/report.tex).
