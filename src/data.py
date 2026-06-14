@@ -91,12 +91,26 @@ def download_prices(
         group_by="column",
     )
 
-    # yfinance returns a column-MultiIndex when multiple tickers are requested;
-    # pull out the Close level and re-order to match the requested ticker order.
+    # yfinance returns a column-MultiIndex when multiple tickers are requested.
+    # Column ordering has changed across yfinance versions:
+    #   older / group_by="column": Level 0 = price type, Level 1 = ticker
+    #   newer default:             Level 0 = ticker,     Level 1 = price type
+    # We detect which ordering is in use and extract accordingly.
     if isinstance(raw.columns, pd.MultiIndex):
-        prices = raw["Close"].copy()
+        level0 = set(raw.columns.get_level_values(0))
+        if "Close" in level0:
+            # (price_type, ticker) ordering
+            prices = raw["Close"].copy()
+        else:
+            # (ticker, price_type) ordering — use cross-section on level 1
+            prices = raw.xs("Close", axis=1, level=1).copy()
     else:
         prices = raw[["Close"]].rename(columns={"Close": tickers[0]})
+
+    # Newer yfinance returns a timezone-aware UTC DatetimeIndex; strip tz so
+    # downstream libraries (arch, statsmodels) receive a plain DatetimeIndex.
+    if hasattr(prices.index, "tz") and prices.index.tz is not None:
+        prices.index = prices.index.tz_convert(None)
 
     prices = prices[list(tickers)].dropna(how="all").sort_index()
     prices.index.name = "Date"
