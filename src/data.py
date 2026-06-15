@@ -19,7 +19,6 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-import yfinance as yf
 
 
 # The fixed sector-diverse basket chosen during scoping:
@@ -83,6 +82,8 @@ def download_prices(
             return cached
         # Stale/empty cache (e.g. saved during a rate-limit hit) — delete and re-download.
         cache.unlink(missing_ok=True)
+
+    import yfinance as yf  # lazy import — not needed when loading from cached_data/
 
     # auto_adjust=True returns the dividend/split-adjusted close in the "Close" column,
     # which is what we want per the assignment ("adjusted closing prices").
