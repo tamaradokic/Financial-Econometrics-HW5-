@@ -12,11 +12,15 @@ cached so the user can drag sliders without re-fitting anything.
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import streamlit as st
 
-from src.data import DEFAULT_TICKERS, TICKER_NAMES, download_riskfree_rate, load_dataset
+from src.data import DEFAULT_TICKERS, PriceData, TICKER_NAMES, download_riskfree_rate, load_dataset
+from src.dcc import DCCResult
 from src.descriptive import (
     descriptive_stats,
     pairwise_data,
@@ -47,8 +51,50 @@ st.set_page_config(
 
 
 # ----------------------------------------------------------------------
-# Cached pipeline — each step memoized so slider-drags are instant
+# Fast-path loader — reads pre-computed results from cached_data/ so
+# Streamlit Cloud starts in seconds rather than re-running the full
+# GARCH + DCC pipeline on every cold boot.
+# Falls back to live computation if cached_data/ is missing.
 # ----------------------------------------------------------------------
+_PRECOMP = Path(__file__).parent / "cached_data"
+_PRECOMP_FILES = [
+    "returns.parquet", "prices.parquet", "rf.parquet",
+    "garch_sigma.parquet", "garch_std_resid.parquet", "garch_params.parquet",
+    "dcc_R_t.npy", "dcc_Sigma_t.npy", "dcc_Q_bar.npy", "dcc_meta.json",
+]
+
+
+@st.cache_resource(show_spinner="Loading pre-computed model results ...")
+def _load_precomputed():
+    if not all((_PRECOMP / f).exists() for f in _PRECOMP_FILES):
+        return None
+    returns = pd.read_parquet(_PRECOMP / "returns.parquet")
+    prices = pd.read_parquet(_PRECOMP / "prices.parquet")
+    rf = pd.read_parquet(_PRECOMP / "rf.parquet")["rf_annual_pct"]
+    sigma = pd.read_parquet(_PRECOMP / "garch_sigma.parquet")
+    std_resid = pd.read_parquet(_PRECOMP / "garch_std_resid.parquet")
+    garch_par = pd.read_parquet(_PRECOMP / "garch_params.parquet")
+    R_t = np.load(_PRECOMP / "dcc_R_t.npy")
+    Sigma_t = np.load(_PRECOMP / "dcc_Sigma_t.npy")
+    Q_bar = np.load(_PRECOMP / "dcc_Q_bar.npy")
+    with open(_PRECOMP / "dcc_meta.json") as f:
+        meta = json.load(f)
+    tickers = tuple(meta["tickers"])
+    dates = pd.DatetimeIndex(meta["dates"])
+    bundle = PriceData(
+        prices=prices, returns=returns, tickers=tickers,
+        start=pd.Timestamp(returns.index.min()),
+        end=pd.Timestamp(returns.index.max()),
+    )
+    dcc = DCCResult(
+        a=meta["a"], b=meta["b"], Q_bar=Q_bar,
+        R_t=R_t, Sigma_t=Sigma_t, loglik=meta["loglik"],
+        dates=dates, tickers=tickers,
+    )
+    return bundle, sigma, std_resid, garch_par, dcc, rf
+
+
+# Live-computation fallback (only used if cached_data/ is absent).
 @st.cache_data(show_spinner="Downloading prices ...")
 def _cached_dataset():
     return load_dataset()
@@ -90,10 +136,16 @@ show_crises = st.sidebar.checkbox(
     help="Overlay coloured bands on time-series charts to mark known turmoil windows.",
 )
 
-# Load data + run the full pipeline once.
-bundle = _cached_dataset()
-fits, sigma, std_resid = _cached_garch(bundle.returns)
-dcc = _cached_dcc(std_resid, sigma)
+# Load the pipeline results — fast path first, live computation as fallback.
+_precomp = _load_precomputed()
+if _precomp is not None:
+    bundle, sigma, std_resid, _garch_params, dcc, _rf_series = _precomp
+else:
+    bundle = _cached_dataset()
+    _fits, sigma, std_resid = _cached_garch(bundle.returns)
+    dcc = _cached_dcc(std_resid, sigma)
+    _garch_params = params_table(_fits)
+    _rf_series = None
 
 st.sidebar.markdown("### Date range (display only)")
 all_dates = bundle.returns.index
@@ -235,7 +287,7 @@ elif rf_mode.startswith("Constant"):
     rf_effective = float(rf_constant) if rf_constant is not None else 0.0
     rf_label = f"rf = {rf_effective:.2f}%"
 else:
-    rf_series = _cached_riskfree()
+    rf_series = _rf_series if _rf_series is not None else _cached_riskfree()
     rf_slice = rf_series.loc[start_d:end_d]
     rf_effective = float(rf_slice.mean()) if len(rf_slice) > 0 else 0.0
     rf_label = f"rf = {rf_effective:.2f}% (3M T-bill avg)"
@@ -315,7 +367,7 @@ st.markdown(
 
 with st.expander("Univariate GARCH(1,1) parameters per stock", expanded=False):
     st.dataframe(
-        params_table(fits).style.format("{:.4f}"),
+        _garch_params.style.format("{:.4f}"),
         use_container_width=True,
     )
     st.caption(

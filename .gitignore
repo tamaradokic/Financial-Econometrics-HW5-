@@ -12,6 +12,10 @@ env/
 data/*.parquet
 data/*.csv
 
+# cached_data/ is intentionally tracked — it holds pre-computed pipeline
+# results that make Streamlit Cloud start instantly (no download/GARCH/DCC).
+# Regenerate with: python -m src.precompute
+
 # Streamlit cache
 .streamlit/secrets.toml
 

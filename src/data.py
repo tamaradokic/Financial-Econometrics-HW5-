@@ -78,7 +78,11 @@ def download_prices(
 
     cache = _cache_path(tickers, start_str, end_str)
     if use_cache and cache.exists():
-        return pd.read_parquet(cache)
+        cached = pd.read_parquet(cache)
+        if len(cached) > 0:
+            return cached
+        # Stale/empty cache (e.g. saved during a rate-limit hit) — delete and re-download.
+        cache.unlink(missing_ok=True)
 
     # auto_adjust=True returns the dividend/split-adjusted close in the "Close" column,
     # which is what we want per the assignment ("adjusted closing prices").
